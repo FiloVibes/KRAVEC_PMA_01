@@ -1,16 +1,26 @@
 import { StatusBar } from "expo-status-bar";
-import { Button, StyleSheet, Text, View } from "react-native";
+import { useState } from "react";
+import { FlatList } from "react-native";
+import {
+  Button,
+  FlatList,
+  StyleSheet,
+  Text,
+  View,
+  TextInput,
+} from "react-native";
+import ItemTask from "./components/itemTask";
 
 export default function App() {
-  const [task, setTask] = useState("use state");
+  const [task, setTask] = useState("");
+  const [taskList, setTaskList] = useState([]);
 
   function handleInputText(text) {
     setTask(text);
   }
 
   function handleAddButton() {
-    console.log("ADD button pressed");
-    setTask("");
+    setTaskList([...taskList, { title: task, done: false }]);
   }
 
   return (
@@ -24,14 +34,11 @@ export default function App() {
         <Button onPress={handleAddButton} title="ADD" />
       </View>
 
-      <View style={styles.taskContainer}>
-        <Text>{task}</Text>
-        <Text>UDALOST 2</Text>
-        <Text>UDALOST 3</Text>
-        <Text>UDALOST 4</Text>
-
-        <StatusBar style="auto" />
-      </View>
+      <FlatList
+        data={taskList}
+        renderItem={({ item }) => <ItemTask task={item} />}
+        keyExtractor={(item) => item.id}
+      />
     </View>
   );
 }
