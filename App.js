@@ -20,7 +20,25 @@ export default function App() {
   }
 
   function handleAddButton() {
-    setTaskList([...taskList, { title: task, done: false }]);
+    const id = Math.random().toString(10).slice(2);
+    // console.log("id: ", id);
+    setTaskList([...taskList, { title: task, done: false, id: id }]);
+  }
+
+  function changeStyleDone(id) {
+    setTaskList(
+      taskList.map((t) => {
+        if (t.id == id) {
+          return { ...t, done: !t.done };
+        } else {
+          return t;
+        }
+      }),
+    );
+  }
+
+  function handleDeleteTask(id) {
+    setTaskList(taskList.filter((t) => t.id !== id));
   }
 
   return (
@@ -36,7 +54,13 @@ export default function App() {
 
       <FlatList
         data={taskList}
-        renderItem={({ item }) => <ItemTask task={item} />}
+        renderItem={({ item }) => (
+          <ItemTask
+            task={item}
+            changeStyle={changeStyleDone}
+            deleteTask={handleDeleteTask}
+          />
+        )}
         keyExtractor={(item) => item.id}
       />
     </View>
